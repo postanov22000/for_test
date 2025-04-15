@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SOCIAL ORBIT | Sell Your Home</title>
+  <title>SOCIAL ORBIT | Lead Qualification</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -51,7 +51,7 @@
       height: 100%;
       width: 0%;
       background: var(--color-accent);
-      transition: width 2s ease-in-out;
+      transition: width 0.3s ease-in-out;
     }
 
     .logo-bar {
@@ -65,11 +65,7 @@
       color: var(--color-accent);
     }
 
-    .logo-bar span {
-      transition: 0.3s ease;
-    }
-
-    .logo-bar:hover span {
+    .logo-bar span:hover {
       text-shadow: 0 0 12px var(--color-accent);
       transform: scale(1.05);
     }
@@ -130,6 +126,30 @@
       box-shadow: 0 0 15px var(--color-accent);
     }
 
+    input[type="text"], input[type="email"], input[type="tel"] {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      background: #1c1c1c;
+      border: 1px solid #444;
+      color: var(--color-text);
+      border-radius: 6px;
+      font-family: var(--font-sans);
+    }
+
+    textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      background: #1c1c1c;
+      border: 1px solid #444;
+      color: var(--color-text);
+      border-radius: 6px;
+      font-family: var(--font-sans);
+    }
+
     button {
       margin-top: 1rem;
       padding: 0.8rem 1.5rem;
@@ -148,7 +168,6 @@
       transform: scale(1.03);
     }
 
-    /* Modal */
     .modal {
       position: fixed;
       top: 0; left: 0;
@@ -184,22 +203,19 @@
       background: var(--color-accent);
       margin-top: 1rem;
     }
+
+    .hidden { display: none; }
   </style>
 </head>
 <body>
-  <!-- Progress Bar -->
-  <div class="progress-container">
-    <div class="progress-bar" id="progressBar"></div>
-  </div>
+  <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
 
   <div class="container">
     <div class="logo-bar">
-      <span>LOGO</span>
-      <span>×</span>
-      <span>LOGO</span>
+      <span>LOGO</span> <span>×</span> <span>LOGO</span>
     </div>
 
-    <h1>Sell Your Home</h1>
+    <h1>Lead Qualification</h1>
 
     <form id="quiz">
       <div class="step active" id="step1">
@@ -225,6 +241,28 @@
         <input type="radio" name="reason" id="r4" value="Financial Hardship"><label for="r4">Financial Hardship</label>
         <input type="radio" name="reason" id="r5" value="Tired Landlord"><label for="r5">Tired Landlord</label>
         <input type="radio" name="reason" id="r6" value="Other"><label for="r6">Other</label>
+        <div id="otherCommentBox" class="hidden">
+          <label for="otherComment">Please tell us why:</label>
+          <textarea id="otherComment" rows="3" placeholder="Enter your reason..."></textarea>
+        </div>
+        <button type="button" onclick="nextStep(3)">Next</button>
+      </div>
+
+      <!-- Step 4: Contact Info -->
+      <div class="step" id="step4">
+        <p><strong>Last Step: Contact Details</strong></p>
+        <label for="name">Full Legal Name:</label>
+        <input type="text" id="name" placeholder="John Doe" required>
+
+        <label for="idNumber">ID Card Number:</label>
+        <input type="text" id="idNumber" placeholder="123456789" required>
+
+        <label for="email">Email Address:</label>
+        <input type="email" id="email" placeholder="you@example.com" required>
+
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" placeholder="+1234567890" required>
+
         <button type="submit">Submit</button>
       </div>
     </form>
@@ -232,116 +270,8 @@
 
   <!-- Modal -->
   <div class="modal" id="modal">
-    <div class="modal-box" id="modalBox">
+    <div class="modal-box">
       <p id="modalText">Message goes here</p>
       <button onclick="closeModal()">OK</button>
     </div>
   </div>
-
-  <script>
-    const answers = {}; // Response tracker
-    const progress = document.getElementById('progressBar');
-    
-    function updateProgress(step) {
-      const percent = Math.min(step * 33.33, 100);
-      progress.style.width = percent + '%';
-    }
-
-    function showModal(message) {
-      document.getElementById('modalText').innerText = message;
-      document.getElementById('modal').classList.add('active');
-    }
-
-    function closeModal() {
-      document.getElementById('modal').classList.remove('active');
-    }
-
-    function nextStep(currentStep) {
-      const timeline = document.querySelector('input[name="timeline"]:checked')?.value;
-      const equity = document.querySelector('input[name="equity"]:checked')?.value;
-
-      if (currentStep === 1) {
-        if (!timeline) return showModal("Please select an option to continue.");
-        answers.timeline = timeline;
-        if (timeline === '6+ months') return showModal("You may not qualify right now. We’ll follow up if things change.");
-      }
-
-      if (currentStep === 2) {
-        if (!equity) return showModal("Please select an option to continue.");
-        answers.equity = equity;
-        if (equity === 'No') return showModal("We typically work with sellers who have strong equity positions.");
-      }
-document.getElementById('quiz').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const reason = document.querySelector('input[name="reason"]:checked')?.value;
-  if (!reason) return showModal("Please select a reason to continue.");
-  answers.reason = reason;
-
-  // Scoring logic
-  let score = 0;
-  if (answers.timeline === "ASAP") score += 5;
-  else if (answers.timeline === "1-3 months") score += 3;
-  if (answers.equity === "Yes") score += 5;
-
-  const highIntentReasons = ["Inherited", "Divorce", "Relocation", "Financial Hardship", "Tired Landlord"];
-  if (highIntentReasons.includes(answers.reason)) score += 3;
-  else score += 1;
-
-  let grade = "C-Lead ❄️";
-  if (score >= 10) grade = "A-Lead 🔥";
-  else if (score >= 6) grade = "B-Lead 🌡️";
-
-  answers.score = score;
-  answers.grade = grade;
-
-  // Send to Sheety
-  fetch("https://api.sheety.co/130e4503ee19afa03487a7288f2a779d/;';';';';';';';';';';';';';';';'/sheet1", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      sheet1: {
-        timeline: answers.timeline,
-        equity: answers.equity,
-        reason: answers.reason,
-        score: answers.score,
-        grade: answers.grade
-      }
-    })
-  })
-  .then(res => res.json())
-  .then(data => {
-    console.log("Lead sent to Google Sheet ✅", data);
-    showModal(`Thanks! Your application has been received.`);
-    updateProgress(3);
-  })
-  .catch(err => {
-    console.error("Error sending to Sheety:", err);
-    showModal("Oops! Something went wrong sending your lead. Please try again.");
-  });
-});
-      // Lock and scroll
-      const current = document.getElementById(`step${currentStep}`);
-      const next = document.getElementById(`step${currentStep + 1}`);
-      if (current && next) {
-        current.classList.remove("active");
-        current.classList.add("locked");
-        next.classList.add("active");
-        updateProgress(currentStep + 1);
-        setTimeout(() => {
-          next.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 150);
-      }
-    }
-
-    document.getElementById('quiz').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const reason = document.querySelector('input[name="reason"]:checked')?.value;
-      if (!reason) return showModal("Please select a reason to continue.");
-      answers.reason = reason;
-      console.log("User responses:", answers); // 💾 Log or send to backend
-      showModal("Thanks! Your application has been received. We’ll reach out shortly.");
-      updateProgress(3);
-    });
-  </script>
-</body>
-</html>
