@@ -16,9 +16,8 @@
       --max-width: 700px;
     }
 
-    * { box-sizing: border-box; }
-
-    html {
+    * {
+      box-sizing: border-box;
       scroll-behavior: smooth;
     }
 
@@ -26,7 +25,8 @@
       background: var(--color-bg);
       color: var(--color-text);
       font-family: var(--font-sans);
-      padding: 2rem;
+      padding: 0;
+      margin: 0;
       display: flex;
       justify-content: center;
     }
@@ -34,12 +34,24 @@
     .container {
       width: 100%;
       max-width: var(--max-width);
-      animation: fadeIn 0.6s ease-in-out;
+      padding: 2rem;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .progress-container {
+      width: 100%;
+      height: 6px;
+      background: #333;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--color-accent);
+      transition: width 0.3s ease-in-out;
     }
 
     .logo-bar {
@@ -47,11 +59,10 @@
       justify-content: center;
       align-items: center;
       gap: 1rem;
-      margin-bottom: 2rem;
+      margin: 2rem 0;
       font-family: var(--font-serif);
       font-size: 1.5rem;
       color: var(--color-accent);
-      position: relative;
     }
 
     .logo-bar span {
@@ -176,6 +187,11 @@
   </style>
 </head>
 <body>
+  <!-- Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
   <div class="container">
     <div class="logo-bar">
       <span>LOGO</span>
@@ -223,11 +239,17 @@
   </div>
 
   <script>
+    const answers = {}; // Response tracker
+    const progress = document.getElementById('progressBar');
+
+    function updateProgress(step) {
+      const percent = Math.min(step * 33.33, 100);
+      progress.style.width = percent + '%';
+    }
+
     function showModal(message) {
-      const modal = document.getElementById('modal');
-      const text = document.getElementById('modalText');
-      text.innerText = message;
-      modal.classList.add('active');
+      document.getElementById('modalText').innerText = message;
+      document.getElementById('modal').classList.add('active');
     }
 
     function closeModal() {
@@ -239,43 +261,39 @@
       const equity = document.querySelector('input[name="equity"]:checked')?.value;
 
       if (currentStep === 1) {
-        if (!timeline) {
-          showModal("Please select an option to continue.");
-          return;
-        }
-        if (timeline === '6+ months') {
-          showModal("You may not qualify right now. We’ll follow up if things change.");
-          return;
-        }
+        if (!timeline) return showModal("Please select an option to continue.");
+        answers.timeline = timeline;
+        if (timeline === '6+ months') return showModal("You may not qualify right now. We’ll follow up if things change.");
       }
 
       if (currentStep === 2) {
-        if (!equity) {
-          showModal("Please select an option to continue.");
-          return;
-        }
-        if (equity === 'No') {
-          showModal("We typically work with sellers who have strong equity positions.");
-          return;
-        }
+        if (!equity) return showModal("Please select an option to continue.");
+        answers.equity = equity;
+        if (equity === 'No') return showModal("We typically work with sellers who have strong equity positions.");
       }
 
-      // Lock and dim previous step
+      // Lock and scroll
       const current = document.getElementById(`step${currentStep}`);
       const next = document.getElementById(`step${currentStep + 1}`);
       if (current && next) {
         current.classList.remove("active");
         current.classList.add("locked");
         next.classList.add("active");
+        updateProgress(currentStep + 1);
         setTimeout(() => {
           next.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 100);
+        }, 150);
       }
     }
 
     document.getElementById('quiz').addEventListener('submit', function(e) {
       e.preventDefault();
+      const reason = document.querySelector('input[name="reason"]:checked')?.value;
+      if (!reason) return showModal("Please select a reason to continue.");
+      answers.reason = reason;
+      console.log("User responses:", answers); // 💾 Log or send to backend
       showModal("Thanks! Your application has been received. We’ll reach out shortly.");
+      updateProgress(3);
     });
   </script>
 </body>
