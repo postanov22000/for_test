@@ -275,3 +275,159 @@
       <button onclick="closeModal()">OK</button>
     </div>
   </div>
+  <script>
+  const answers = {};
+  const progress = document.getElementById('progressBar');
+
+  function updateProgress(step) {
+    const percent = Math.min(step * 25, 100);
+    progress.style.width = percent + '%';
+  }
+
+  function showModal(message) {
+    document.getElementById('modalText').innerHTML = message;
+    document.getElementById('modal').classList.add('active');
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('active');
+  }
+
+  function resetQuiz() {
+    document.querySelectorAll("input[type='radio']").forEach(el => el.checked = false);
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active', 'locked'));
+    document.getElementById('step1').classList.add('active');
+    updateProgress(0);
+    answers.timeline = null;
+    answers.equity = null;
+    answers.reason = null;
+    answers.otherComment = "";
+  }
+
+  function nextStep(currentStep) {
+    const timeline = document.querySelector('input[name="timeline"]:checked')?.value;
+    const equity = document.querySelector('input[name="equity"]:checked')?.value;
+    const reason = document.querySelector('input[name="reason"]:checked')?.value;
+    const otherComment = document.getElementById('otherComment')?.value;
+
+    if (currentStep === 1) {
+      if (!timeline) return showModal("Please select an option.");
+      if (timeline === "6+ months") {
+        showModal("Unfortunately, this program is only for motivated sellers ready to act now.");
+        setTimeout(() => resetQuiz(), 3000);
+        return;
+      }
+      answers.timeline = timeline;
+    }
+
+    if (currentStep === 2) {
+      if (!equity) return showModal("Please select an option.");
+      if (equity === "No") {
+        showModal("Unfortunately, we require at least 50% equity to proceed.");
+        setTimeout(() => resetQuiz(), 3000);
+        return;
+      }
+      answers.equity = equity;
+    }
+
+    if (currentStep === 3) {
+      if (!reason) return showModal("Please select a reason.");
+      answers.reason = reason;
+      answers.otherComment = reason === "Other" ? otherComment : "";
+    }
+
+    const current = document.getElementById(`step${currentStep}`);
+    const next = document.getElementById(`step${currentStep + 1}`);
+    if (current && next) {
+      current.classList.remove("active");
+      current.classList.add("locked");
+      next.classList.add("active");
+      updateProgress(currentStep + 1);
+      setTimeout(() => next.scrollIntoView({ behavior: "smooth", block: "start" }), 150);
+    }
+  }
+
+  // Show/hide comment box for "Other"
+  document.querySelectorAll('input[name="reason"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      const box = document.getElementById('otherCommentBox');
+      box.classList.toggle('hidden', radio.value !== "Other");
+    });
+  });
+
+  document.getElementById('quiz').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value.trim();
+    const idNumber = document.getElementById("idNumber").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+
+    if (!name || !idNumber || !email || !phone) {
+      return showModal("Please complete all contact fields.");
+    }
+
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      return showModal("Please enter a valid email address.");
+    }
+
+    if (!/^\+?\d{7,15}$/.test(phone)) {
+      return showModal("Please enter a valid phone number.");
+    }
+
+    answers.legalName = name;
+    answers.idNumber = idNumber;
+    answers.email = email;
+    answers.phone = phone;
+
+    // Scoring logic
+    let score = 0;
+    if (answers.timeline === "ASAP") score += 5;
+    else if (answers.timeline === "1-3 months") score += 3;
+    if (answers.equity === "Yes") score += 5;
+
+    const highIntentReasons = ["Inherited", "Divorce", "Relocation", "Financial Hardship", "Tired Landlord"];
+    if (highIntentReasons.includes(answers.reason)) score += 3;
+    else score += 1;
+
+    let grade = "C-Lead ❄️";
+    if (score >= 10) grade = "A-Lead 🔥";
+    else if (score >= 6) grade = "B-Lead 🌡️";
+
+    answers.score = score;
+    answers.grade = grade;
+
+    // ✅ Send to Sheety
+    fetch("https://api.sheety.co/YOUR_ID/YOUR_PROJECT/YOUR_SHEET", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        YOUR_SHEET: {
+          timeline: answers.timeline,
+          equity: answers.equity,
+          reason: answers.reason,
+          otherComment: answers.otherComment,
+          legalName: answers.legalName,
+          idNumber: answers.idNumber,
+          email: answers.email,
+          phone: answers.phone,
+          score: answers.score,
+          grade: answers.grade
+        }
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Sent to Sheety ✅", data);
+      showModal(`Thanks, ${answers.legalName}!<br><br><strong>Your Lead Grade:</strong> ${grade}`);
+      updateProgress(4);
+    })
+    .catch(err => {
+      console.error("Error sending to Sheety:", err);
+      showModal("Oops! Something went wrong while submitting. Try again soon.");
+    });
+  });
+</script>
+</body>
+</html>
+
