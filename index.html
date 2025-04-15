@@ -167,55 +167,27 @@
       box-shadow: 0 0 8px var(--color-accent);
       transform: scale(1.03);
     }
-    /* Trust Badges Styles */
-.trust-badges {
+   /* Mini Trust Badges */
+.mini-trust-badges {
   display: flex;
+  gap: 0.8rem;
+  margin: 1rem 0 0;
   justify-content: center;
-  gap: 2rem;
-  margin: 2rem 0;
-  flex-wrap: wrap;
+  font-size: 0.7rem;
+  color: var(--color-muted);
 }
 
-.badge {
+.mini-badge {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
-  background: rgba(212, 175, 55, 0.1);
-  border: 1px solid var(--color-accent);
-  border-radius: 50px;
-  color: var(--color-accent);
-  font-size: 0.9rem;
-  font-weight: 500;
+  gap: 0.3rem;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
 }
 
-.badge svg {
-  width: 18px;
-  height: 18px;
+.mini-badge:hover {
+  opacity: 1;
 }
-
-/* Mobile responsive */
-@media (max-width: 600px) {
-  .trust-badges {
-    gap: 1rem;
-    justify-content: space-around;
-  }
-  .badge {
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
-  }
-}
-    // Add slight animation to badges
-document.querySelectorAll('.badge').forEach((badge, index) => {
-  badge.style.opacity = '0';
-  badge.style.transform = 'translateY(20px)';
-  badge.style.transition = `all 0.4s ease ${index * 0.1}s`;
-  
-  setTimeout(() => {
-    badge.style.opacity = '1';
-    badge.style.transform = 'translateY(0)';
-  }, 500);
-});
 
     .modal {
       position: fixed;
@@ -257,32 +229,6 @@ document.querySelectorAll('.badge').forEach((badge, index) => {
   </style>
 </head>
 <body>
-      <!-- Trust Badges Section -->
-    <div class="trust-badges">
-      <div class="badge">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-        </svg>
-        <span>Private & Secure</span>
-      </div>
-      <div class="badge">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
-          <line x1="9" y1="9" x2="9.01" y2="9"></line>
-          <line x1="15" y1="9" x2="15.01" y2="9"></line>
-        </svg>
-        <span>No Obligation</span>
-      </div>
-      <div class="badge">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-        <span>Verified Experts</span>
-      </div>
-    </div>
-  </div> <!-- Close container div -->
   <div class="container">
     <div class="logo-bar">
       <span>SOCIAL ORBIT</span> <span>×</span> <span>LOGO</span>
@@ -338,6 +284,10 @@ document.querySelectorAll('.badge').forEach((badge, index) => {
 
         <button type="submit">Submit</button>
       </div>
+      <div class="mini-trust-badges">
+  <span class="mini-badge">🔒 Private</span>
+  <span class="mini-badge">🔄 No Obligation</span>
+</div>
     </form>
   </div>
 
@@ -427,6 +377,17 @@ document.querySelectorAll('.badge').forEach((badge, index) => {
       box.classList.toggle('hidden', radio.value !== "Other");
     });
   });
+    // Add slight animation to badges
+document.querySelectorAll('.badge').forEach((badge, index) => {
+  badge.style.opacity = '0';
+  badge.style.transform = 'translateY(20px)';
+  badge.style.transition = `all 0.4s ease ${index * 0.1}s`;
+  
+  setTimeout(() => {
+    badge.style.opacity = '1';
+    badge.style.transform = 'translateY(0)';
+  }, 500);
+});
 
   document.getElementById('quiz').addEventListener('submit', function(e) {
     e.preventDefault();
