@@ -51,7 +51,7 @@
       height: 100%;
       width: 0%;
       background: var(--color-accent);
-      transition: width 0.3s ease-in-out;
+      transition: width 5s ease-in-out;
     }
 
     .logo-bar {
@@ -215,7 +215,7 @@
       <span>SOCIAL ORBIT</span> <span>×</span> <span>LOGO</span>
     </div>
 
-    <h1>Lead Qualification</h1>
+    <h1>SELL YOUR HOME</h1>
 
     <form id="quiz">
       <div class="step active" id="step1">
@@ -398,7 +398,7 @@
     answers.grade = grade;
 
     // ✅ Send to Sheety
-    fetch("https://api.sheety.co/YOUR_ID/YOUR_PROJECT/YOUR_SHEET", {
+    fetch("https://api.sheety.co/130e4503ee19afa03487a7288f2a779d/;';';';';';';';';';';';';';';';'/sheet1", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -419,7 +419,7 @@
     .then(res => res.json())
     .then(data => {
       console.log("Sent to Sheety ✅", data);
-      showModal(`Thanks, ${answers.legalName}!<br><br><strong>Your Lead Grade:</strong> ${grade}`);
+      showModal(`Thanks, ${answers.legalName}!we are getting back to you in 5 min`);
       updateProgress(4);
     })
     .catch(err => {
