@@ -167,26 +167,31 @@
       box-shadow: 0 0 8px var(--color-accent);
       transform: scale(1.03);
     }
-   /* Mini Trust Badges */
-.mini-trust-badges {
+  /* Add to your CSS */
+.trust-container {
   display: flex;
-  gap: 0.8rem;
-  margin: 1rem 0 0;
   justify-content: center;
-  font-size: 0.7rem;
-  color: var(--color-muted);
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+  padding-top: 1rem;
+  border-top: 1px solid #333;
 }
 
-.mini-badge {
+.trust-badge {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
-  opacity: 0.8;
-  transition: opacity 0.3s ease;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  transition: all 0.3s ease;
 }
 
-.mini-badge:hover {
-  opacity: 1;
+.trust-badge:hover {
+  color: var(--color-accent);
+}
+
+.trust-badge svg {
+  flex-shrink: 0;
 }
 
     .modal {
@@ -229,9 +234,26 @@
   </style>
 </head>
 <body>
+  
   <div class="container">
     <div class="logo-bar">
       <span>SOCIAL ORBIT</span> <span>×</span> <span>LOGO</span>
+      <!-- Add this right before the closing </div> of your container -->
+<div class="trust-container">
+  <div class="trust-badge">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--color-accent)" stroke-width="2">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+    </svg>
+    <span>Private & Secure</span>
+  </div>
+  <div class="trust-badge">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--color-accent)" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <path d="M12 8v4l3 3"></path>
+    </svg>
+    <span>No Obligation</span>
+  </div>
+</div>
     </div>
 
     <h1>SELL YOUR HOME</h1>
