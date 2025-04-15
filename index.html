@@ -311,7 +311,7 @@ document.getElementById('quiz').addEventListener('submit', function(e) {
   .then(res => res.json())
   .then(data => {
     console.log("Lead sent to Google Sheet ✅", data);
-    showModal(`Thanks! Your application has been received.<br><br><strong>Lead Grade:</strong> ${grade}`);
+    showModal(`Thanks! Your application has been received.`);
     updateProgress(3);
   })
   .catch(err => {
