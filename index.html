@@ -241,7 +241,37 @@
   <script>
     const answers = {}; // Response tracker
     const progress = document.getElementById('progressBar');
-    document.getElementById('quiz').addEventListener('submit', function(e) {
+    
+    function updateProgress(step) {
+      const percent = Math.min(step * 33.33, 100);
+      progress.style.width = percent + '%';
+    }
+
+    function showModal(message) {
+      document.getElementById('modalText').innerText = message;
+      document.getElementById('modal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('active');
+    }
+
+    function nextStep(currentStep) {
+      const timeline = document.querySelector('input[name="timeline"]:checked')?.value;
+      const equity = document.querySelector('input[name="equity"]:checked')?.value;
+
+      if (currentStep === 1) {
+        if (!timeline) return showModal("Please select an option to continue.");
+        answers.timeline = timeline;
+        if (timeline === '6+ months') return showModal("You may not qualify right now. We’ll follow up if things change.");
+      }
+
+      if (currentStep === 2) {
+        if (!equity) return showModal("Please select an option to continue.");
+        answers.equity = equity;
+        if (equity === 'No') return showModal("We typically work with sellers who have strong equity positions.");
+      }
+document.getElementById('quiz').addEventListener('submit', function(e) {
   e.preventDefault();
   const reason = document.querySelector('input[name="reason"]:checked')?.value;
   if (!reason) return showModal("Please select a reason to continue.");
@@ -289,38 +319,6 @@
     showModal("Oops! Something went wrong sending your lead. Please try again.");
   });
 });
-
-
-    function updateProgress(step) {
-      const percent = Math.min(step * 33.33, 100);
-      progress.style.width = percent + '%';
-    }
-
-    function showModal(message) {
-      document.getElementById('modalText').innerText = message;
-      document.getElementById('modal').classList.add('active');
-    }
-
-    function closeModal() {
-      document.getElementById('modal').classList.remove('active');
-    }
-
-    function nextStep(currentStep) {
-      const timeline = document.querySelector('input[name="timeline"]:checked')?.value;
-      const equity = document.querySelector('input[name="equity"]:checked')?.value;
-
-      if (currentStep === 1) {
-        if (!timeline) return showModal("Please select an option to continue.");
-        answers.timeline = timeline;
-        if (timeline === '6+ months') return showModal("You may not qualify right now. We’ll follow up if things change.");
-      }
-
-      if (currentStep === 2) {
-        if (!equity) return showModal("Please select an option to continue.");
-        answers.equity = equity;
-        if (equity === 'No') return showModal("We typically work with sellers who have strong equity positions.");
-      }
-
       // Lock and scroll
       const current = document.getElementById(`step${currentStep}`);
       const next = document.getElementById(`step${currentStep + 1}`);
