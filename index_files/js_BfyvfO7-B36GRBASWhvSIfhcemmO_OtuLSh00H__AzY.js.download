@@ -1,0 +1,2 @@
+/* @license GNU-GPL-2.0-or-later https://www.drupal.org/licensing/faq */
+(function(Drupal){'use strict';Drupal.behaviors.ajaxDropdownLanguage={attach:function(context){const observer=new MutationObserver(function(mutations){mutations.forEach(function(mutation){for(let i=0;i<mutation.addedNodes.length;i++)if(mutation.addedNodes[i].id==='block-dropdownlanguagecontent')Drupal.attachBehaviors();});});const target=context.querySelector('.main-header__language-switcher');if(target)observer.observe(target,{childList:true,subtree:true});}};}(Drupal));;
