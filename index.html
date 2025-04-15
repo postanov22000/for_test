@@ -3,97 +3,107 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Luxury Escape</title>
+  <title>SOCIAL ORBIT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --space-xs: 0.5rem;
+      --space-sm: 1rem;
+      --space-md: 2rem;
+      --space-lg: 4rem;
+
+      --color-bg: #111;
+      --color-text: #fff;
+      --color-muted: #ccc;
+      --color-accent: #f3eee7;
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
+
     body {
-      font-family: 'Helvetica Neue', sans-serif;
-      background-color: #111;
-      color: #fff;
-      line-height: 1.6;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: 'Inter', sans-serif;
     }
+
     header {
-      position: absolute;
-      width: 100%;
-      top: 0;
-      left: 0;
-      padding: 20px 40px;
+      padding: var(--space-sm) var(--space-md);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      z-index: 10;
     }
-    header .logo {
-      font-size: 1.2rem;
-      letter-spacing: 2px;
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.3rem;
     }
-    header nav a {
-      margin-left: 20px;
-      color: #ccc;
+
+    nav a {
+      margin-left: var(--space-md);
+      color: var(--color-muted);
       text-decoration: none;
       font-size: 0.9rem;
     }
+
     .hero {
       height: 100vh;
-      background: url('your-hero.jpg') center/cover no-repeat;
+      background: url('your-image.jpg') center/cover no-repeat;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       text-align: center;
-      padding: 0 20px;
+      padding: var(--space-sm);
     }
+
     .hero h1 {
       font-size: 3rem;
+      font-family: 'Playfair Display', serif;
       max-width: 700px;
-      font-weight: 300;
+      font-weight: 400;
     }
+
     .hero p {
-      margin-top: 20px;
-      font-size: 1.1rem;
-      color: #ccc;
+      color: var(--color-muted);
+      margin-top: var(--space-sm);
     }
+
     .btn {
       display: inline-block;
-      margin-top: 30px;
-      padding: 12px 30px;
-      border: 1px solid #fff;
-      color: #fff;
+      margin-top: var(--space-md);
+      padding: 12px 24px;
+      border: 1px solid var(--color-text);
       text-decoration: none;
+      color: var(--color-text);
       transition: 0.3s;
     }
+
     .btn:hover {
-      background-color: #fff;
-      color: #111;
-    }
-    @media (max-width: 768px) {
-      .hero h1 {
-        font-size: 2rem;
-      }
+      background-color: var(--color-text);
+      color: var(--color-bg);
     }
   </style>
 </head>
 <body>
-
   <header>
-    <div class="logo">AMAN</div>
+    <div class="logo">SOCIAL ORBIT</div>
     <nav>
-      <a href="#">Destinations</a>
-      <a href="#">Experiences</a>
+      <a href="#">Home</a>
+      <a href="#">About</a>
       <a href="#">Contact</a>
     </nav>
   </header>
 
   <section class="hero">
     <div>
-      <h1>Your Journey to Tranquility Begins Here</h1>
-      <p>Explore unique luxury retreats in the world’s most beautiful places.</p>
-      <a href="#" class="btn">Discover More</a>
+      <h1>Empowering Brands Through Strategic Creativity</h1>
+      <p>We craft digital experiences that elevate your presence online.</p>
+      <a href="#" class="btn">Let’s Work Together</a>
     </div>
   </section>
-
 </body>
 </html>
