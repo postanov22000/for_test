@@ -419,7 +419,7 @@
     .then(res => res.json())
     .then(data => {
       console.log("Sent to Sheety ✅", data);
-      showModal(`Thanks, ${answers.legalName}!we are getting back to you in 5 min`);
+      showModal(`Thanks, ${answers.legalName} !we are getting back to you in 5 min`);
       updateProgress(4);
     })
     .catch(err => {
