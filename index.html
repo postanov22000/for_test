@@ -241,6 +241,55 @@
   <script>
     const answers = {}; // Response tracker
     const progress = document.getElementById('progressBar');
+    document.getElementById('quiz').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const reason = document.querySelector('input[name="reason"]:checked')?.value;
+  if (!reason) return showModal("Please select a reason to continue.");
+  answers.reason = reason;
+
+  // Scoring logic
+  let score = 0;
+  if (answers.timeline === "ASAP") score += 5;
+  else if (answers.timeline === "1-3 months") score += 3;
+  if (answers.equity === "Yes") score += 5;
+
+  const highIntentReasons = ["Inherited", "Divorce", "Relocation", "Financial Hardship", "Tired Landlord"];
+  if (highIntentReasons.includes(answers.reason)) score += 3;
+  else score += 1;
+
+  let grade = "C-Lead ❄️";
+  if (score >= 10) grade = "A-Lead 🔥";
+  else if (score >= 6) grade = "B-Lead 🌡️";
+
+  answers.score = score;
+  answers.grade = grade;
+
+  // Send to Sheety
+  fetch("https://api.sheety.co/YOUR_ID/projectName/sheet1", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      sheet1: {
+        timeline: answers.timeline,
+        equity: answers.equity,
+        reason: answers.reason,
+        score: answers.score,
+        grade: answers.grade
+      }
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log("Lead sent to Google Sheet ✅", data);
+    showModal(`Thanks! Your application has been received.<br><br><strong>Lead Grade:</strong> ${grade}`);
+    updateProgress(3);
+  })
+  .catch(err => {
+    console.error("Error sending to Sheety:", err);
+    showModal("Oops! Something went wrong sending your lead. Please try again.");
+  });
+});
+
 
     function updateProgress(step) {
       const percent = Math.min(step * 33.33, 100);
